@@ -50,6 +50,8 @@ RUTORRENT_HEALTH_PORT=$((RUTORRENT_PORT + 1))
 WEBDAV_PORT=${WEBDAV_PORT:-9000}
 WEBDAV_HEALTH_PORT=$((WEBDAV_PORT + 1))
 
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-/downloads}
+
 # Timezone
 echo "Setting timezone to ${TZ}..."
 ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime
@@ -101,6 +103,7 @@ echo "Setting Nginx WebDAV configuration..."
 sed -e "s!@WEBDAV_AUTHBASIC_STRING@!$WEBDAV_AUTHBASIC_STRING!g" \
   -e "s!@WEBDAV_PORT@!$WEBDAV_PORT!g" \
   -e "s!@WEBDAV_HEALTH_PORT@!$WEBDAV_HEALTH_PORT!g" \
+  -e "s!@DOWNLOAD_DIR@!$DOWNLOAD_DIR!g" \
   /tpls/etc/nginx/conf.d/webdav.conf > /etc/nginx/conf.d/webdav.conf
 
 # Healthcheck
@@ -124,15 +127,15 @@ echo "Initializing files and folders..."
 mkdir -p /data/geoip \
   /data/rtorrent/log \
   /data/rtorrent/.session \
-  /data/rtorrent/watch \
   /data/rutorrent/conf/users \
   /data/rutorrent/plugins \
   /data/rutorrent/plugins-conf \
   /data/rutorrent/share/users \
   /data/rutorrent/share/torrents \
   /data/rutorrent/themes \
-  /downloads/complete \
-  /downloads/temp
+  "${DOWNLOAD_DIR}" \
+  "${DOWNLOAD_DIR}/files" \
+  "${DOWNLOAD_DIR}/watch"
 touch /passwd/rpc.htpasswd \
   /passwd/rutorrent.htpasswd \
   /passwd/webdav.htpasswd \
@@ -163,6 +166,7 @@ sed -e "s!@RT_LOG_LEVEL@!$RT_LOG_LEVEL!g" \
   -e "s!@RT_DHT_PORT@!$RT_DHT_PORT!g" \
   -e "s!@RT_INC_PORT@!$RT_INC_PORT!g" \
   -e "s!@XMLRPC_SIZE_LIMIT@!$XMLRPC_SIZE_LIMIT!g" \
+  -e "s!@DOWNLOAD_DIR@!$DOWNLOAD_DIR!g" \
   /tpls/etc/rtorrent/.rtlocal.rc > /etc/rtorrent/.rtlocal.rc
 if [ "${RT_LOG_EXECUTE}" = "true" ]; then
   echo "  Enabling rTorrent execute log..."
@@ -347,14 +351,14 @@ chown rtorrent. \
   /data/rutorrent/share/users \
   /data/rutorrent/share/torrents \
   /downloads \
-  /downloads/complete \
-  /downloads/temp \
+  "${DOWNLOAD_DIR}" \
+  "${DOWNLOAD_DIR}/files" \
+  "${DOWNLOAD_DIR}/watch" \
   "${RU_LOG_FILE}"
 chown -R rtorrent. \
   /data/geoip \
   /data/rtorrent/log \
   /data/rtorrent/.session \
-  /data/rtorrent/watch \
   /data/rutorrent/conf \
   /data/rutorrent/plugins \
   /data/rutorrent/plugins-conf \

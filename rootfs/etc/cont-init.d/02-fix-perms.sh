@@ -1,6 +1,8 @@
 #!/usr/bin/with-contenv sh
 #shellcheck shell=sh
 
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-/downloads}
+
 echo "Fixing perms..."
 mkdir -p /data/rtorrent \
   /data/rutorrent \
@@ -17,7 +19,10 @@ chown rtorrent. \
   /data \
   /data/rtorrent \
   /data/rutorrent \
-  /downloads
+  /downloads \
+  "${DOWNLOAD_DIR}" \
+  "${DOWNLOAD_DIR}/files" \
+  "${DOWNLOAD_DIR}/watch"
 chown -R rtorrent. \
   /etc/rtorrent \
   /passwd \

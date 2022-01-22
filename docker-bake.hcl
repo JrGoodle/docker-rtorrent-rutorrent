@@ -29,4 +29,7 @@ target "image-all" {
     "linux/arm/v7",
     "linux/arm64"
   ]
+  tags = [
+    "jrgoodle/rtorrent-rutorrent:latest"
+  ]
 }

@@ -1,5 +1,5 @@
 variable "DEFAULT_TAG" {
-  default = "rtorrent-rutorrent:local"
+  default = "jrgoodle/rtorrent-rutorrent:latest"
 }
 
 // Special target: https://github.com/docker/metadata-action#bake-definition
@@ -28,8 +28,5 @@ target "image-all" {
     "linux/arm/v6",
     "linux/arm/v7",
     "linux/arm64"
-  ]
-  tags = [
-    "jrgoodle/rtorrent-rutorrent:latest"
   ]
 }
